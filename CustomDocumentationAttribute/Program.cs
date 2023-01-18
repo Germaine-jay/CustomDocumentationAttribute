@@ -1,2 +1,6 @@
-﻿// See https://aka.ms/new-console-template for more information
-Console.WriteLine("Hello, World!");
+﻿using System.IO;
+using DocumentAttribute;
+
+RunCustomDocumentation.GetDocs(typeof(BEZAOTrainee));
+RunCustomDocumentation.GetDocs(typeof(BEZAO));
+RunCustomDocumentation.GetDocs(typeof(Scream));

@@ -6,17 +6,17 @@ namespace DocumentAttribute
 {
     
     [AttributeUsage(AttributeTargets.All)]
-    public class AuthorsAttribute : Attribute
+    public class DocumentAttribute : Attribute
     {
-        protected string _Description;
-        protected string _Output;
-        protected string _Input;
+        public string Description;
+        public string Output;
+        public string Input;
 
-        public AuthorsAttribute(string description, string Output="" , string Input = "")
+        public DocumentAttribute(string description, string output="" , string input = "")
         {
-            _Description = description;
-            _Input = Input;
-            _Output = Output;
+            Description = description;
+            Input = input;
+            Output = output;
         }
     }
 }
