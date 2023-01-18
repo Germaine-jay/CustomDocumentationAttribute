@@ -20,11 +20,11 @@ namespace DocumentAttribute
                 var attributes = attrtype.GetCustomAttributes(typeof(DocumentAttribute), true);
                 if (attributes.Length > 0)
                 {
-
                     if (attrtype.IsClass)
                     {
                         Console.WriteLine("Class: {0}", attrtype.Name);
                         Console.WriteLine("\tDescription: {0}", ((DocumentAttribute)attributes[0]).Description);
+
                     }
 
                     else if (attrtype.IsEnum)
@@ -47,7 +47,7 @@ namespace DocumentAttribute
         public static void GetMethods(Type type)
         {
 
-            MethodInfo[] methods = type.GetMethods().OrderBy(m => m.Name).ToArray();
+            MethodInfo[] methods = type.GetMethods();
             foreach (MethodInfo method in methods)
             {
                 var AttributesMethods = method.GetCustomAttributes(typeof(DocumentAttribute), true);
@@ -57,8 +57,8 @@ namespace DocumentAttribute
                     Console.WriteLine("Method: {0}", method.Name);
 
                     Console.WriteLine("\tDescription: {0}", ((DocumentAttribute)AttributesMethods[0]).Description);
-                    Console.WriteLine("\tOutput: {0}",((DocumentAttribute)AttributesMethods[0]).Output);
                     Console.WriteLine("\tInput: {0}", ((DocumentAttribute)AttributesMethods[0]).Input);
+                    Console.WriteLine("\tOutput: {0}",((DocumentAttribute)AttributesMethods[0]).Output);
 
                     Console.WriteLine("\n");
                 }
@@ -67,9 +67,9 @@ namespace DocumentAttribute
 
         public static void GetProperties(Type type)
         {
-            PropertyInfo[] methods = type.GetProperties().OrderBy(m => m.Name).ToArray();
+            PropertyInfo[] properties = type.GetProperties().OrderBy(m => m.Name).ToArray();
 
-            foreach (PropertyInfo property in type.GetProperties())
+            foreach (PropertyInfo property in properties)
             {
                 var AttributesProperty = property.GetCustomAttributes(typeof(DocumentAttribute), true);
 
@@ -78,7 +78,6 @@ namespace DocumentAttribute
                     Console.WriteLine("Property: {0}",property.Name);
 
                     Console.WriteLine("\tDescription: {0}",((DocumentAttribute)AttributesProperty[0]).Description);
-                    Console.WriteLine("\tOutput: {0}",((DocumentAttribute)AttributesProperty[0]).Output);
                     Console.WriteLine("\tInput: {0}", ((DocumentAttribute)AttributesProperty[0]).Input);
 
                     Console.WriteLine("\n");
@@ -96,7 +95,6 @@ namespace DocumentAttribute
                     Console.WriteLine("Constructor: {0}",constructor.Name);
 
                     Console.WriteLine("\tDescription: {0}",((DocumentAttribute)constructorAttributes[0]).Description);
-                    Console.WriteLine("\toutput: {0}",((DocumentAttribute)constructorAttributes[0]).Output);
                     Console.WriteLine("\tInput: {0}",((DocumentAttribute)constructorAttributes[0]).Input);
 
                     Console.WriteLine("\n");

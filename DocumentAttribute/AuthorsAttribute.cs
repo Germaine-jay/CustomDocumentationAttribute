@@ -12,11 +12,11 @@ namespace DocumentAttribute
         public string Output;
         public string Input;
 
-        public DocumentAttribute(string description, string output="" , string input = "")
+        public DocumentAttribute(string description)
         {
             Description = description;
-            Input = input;
-            Output = output;
+            Input = null;
+            Output = null;
         }
     }
 }
