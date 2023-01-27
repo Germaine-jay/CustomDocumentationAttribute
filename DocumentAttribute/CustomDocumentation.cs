@@ -8,44 +8,16 @@ namespace DocumentAttribute
 {
     public class CustomDocumentation
     {
-        public static void GetClass()
+        public static void GetClass(Type type)
         {
-            var assembly = Assembly.GetExecutingAssembly();
-            Console.WriteLine("\n");
-            Console.WriteLine();
-            var types = assembly.GetTypes();
-
-            foreach (Type attrtype in types)
+            var attributesz = type.GetCustomAttributes(typeof(DocumentAttribute), true);
+            if (attributesz.Length > 0)
             {
-                var attributes = attrtype.GetCustomAttributes(typeof(DocumentAttribute), true);
-                if (attributes.Length > 0)
+                if (type.IsClass)
                 {
-                    if (attrtype.IsClass)
-                    {
-                        Console.WriteLine("Class: {0}", attrtype.Name);
-                        Console.WriteLine("\tDescription: {0}", ((DocumentAttribute)attributes[0]).Description);
-
-                    }
-
-                    else if (attrtype.IsEnum)
-                    {
-                        Console.WriteLine("Enum: {0}", attrtype.Name);
-                        Console.WriteLine("\tDescription: {0}", ((DocumentAttribute?)attributes.SingleOrDefault(x => x.GetType() == typeof(DocumentAttribute)))?.Description);
-
-                        string[] names = attrtype.GetEnumNames();
-                        foreach (string name in names)
-                        {
-                            Console.WriteLine(name);
-
-                        }
-                        Console.WriteLine();
-                    }
+                    Console.WriteLine("Class: {0}", type.Name);
                 }
             }
-        }
-
-        public static void GetMethods(Type type)
-        {
 
             MethodInfo[] methods = type.GetMethods();
             foreach (MethodInfo method in methods)
@@ -58,60 +30,63 @@ namespace DocumentAttribute
 
                     Console.WriteLine("\tDescription: {0}", ((DocumentAttribute)AttributesMethods[0]).Description);
                     Console.WriteLine("\tInput: {0}", ((DocumentAttribute)AttributesMethods[0]).Input);
-                    Console.WriteLine("\tOutput: {0}",((DocumentAttribute)AttributesMethods[0]).Output);
+                    Console.WriteLine("\tOutput: {0}", ((DocumentAttribute)AttributesMethods[0]).Output);
 
                     Console.WriteLine("\n");
                 }
             }
-        }
 
-        public static void GetProperties(Type type)
-        {
-            PropertyInfo[] properties = type.GetProperties().OrderBy(m => m.Name).ToArray();
-
+            PropertyInfo[] properties = type.GetProperties();
             foreach (PropertyInfo property in properties)
             {
                 var AttributesProperty = property.GetCustomAttributes(typeof(DocumentAttribute), true);
 
                 if (AttributesProperty.Length > 0)
                 {
-                    Console.WriteLine("Property: {0}",property.Name);
-
-                    Console.WriteLine("\tDescription: {0}",((DocumentAttribute)AttributesProperty[0]).Description);
-                    Console.WriteLine("\tInput: {0}", ((DocumentAttribute)AttributesProperty[0]).Input);
+                    Console.WriteLine("Property: {0}", property.Name);
+                    Console.WriteLine("\tDescription: {0}", ((DocumentAttribute)AttributesProperty[0]).Description);
 
                     Console.WriteLine("\n");
                 }
             }
-        }
-        public static void GetConstructorInfo(Type type)
-        {
+
             ConstructorInfo[] constructorInfo = type.GetConstructors();
             foreach (ConstructorInfo constructor in constructorInfo)
             {
                 var constructorAttributes = constructor.GetCustomAttributes(typeof(DocumentAttribute), true);
                 if (constructorAttributes.Length > 0)
                 {
-                    Console.WriteLine("Constructor: {0}",constructor.Name);
-
-                    Console.WriteLine("\tDescription: {0}",((DocumentAttribute)constructorAttributes[0]).Description);
-                    Console.WriteLine("\tInput: {0}",((DocumentAttribute)constructorAttributes[0]).Input);
+                    Console.WriteLine("Constructor: {0}", constructor.Name);
+                    Console.WriteLine("\tDescription: {0}", ((DocumentAttribute)constructorAttributes[0]).Description);
+                    Console.WriteLine("\tInput: {0}", ((DocumentAttribute)constructorAttributes[0]).Input);
 
                     Console.WriteLine("\n");
                 }
             }
+
+            if (type.IsEnum)
+            {
+                Console.WriteLine("Enum: {0}", type.Name);
+
+                string[] names = type.GetEnumNames();
+                foreach (string name in names)
+                {
+                    Console.WriteLine("\t{0}", name);
+                }
+            }
         }
     }
-    public class RunCustomDocumentation : CustomDocumentation
+    public class RunCustomDocumentation
     {
-        public static void GetDocs(Type type)
+        public static void GetDocs()
         {
-            GetClass();
-            GetMethods(type);
-            GetProperties(type);
-            GetConstructorInfo(type);
+            var assembly = Assembly.GetExecutingAssembly();
+            Type[] types = assembly.GetTypes();
 
-            Console.WriteLine();
+            foreach (Type t in types)
+            {
+                CustomDocumentation.GetClass(t);
+            }
         }
     }      
 }
